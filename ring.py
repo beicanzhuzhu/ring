@@ -172,11 +172,12 @@ with output(output_type="list",
                 alarm_clock.append(user_time)
 
             # 即将开始的事
-            elif time_difference(user_start_time[0], user_start_time[1], time_now[0], time_now[1]) == settings["remind_you_ahead_of_time_to_start_the_event"]:
-                start_soon.append(user_time)
+            if 0 < time_difference(time_now[0], time_now[1], user_start_time[0], user_start_time[1]) <= settings["remind_you_ahead_of_time_to_start_the_event"]:
+                if user_time not in start_soon:
+                    start_soon.append(user_time)
 
             # 正在进行的事
-            elif user_time["time_end"] != "null" and user_start_time <= time_now <= user_end_time:
+            if user_time["time_end"] != "null" and user_start_time <= time_now <= user_end_time:
                 # 从即将到来的事列表中删除
                 if user_time in start_soon:
                     start_soon.remove(user_time)
@@ -244,7 +245,7 @@ with output(output_type="list",
                         time_difference(time_now[0], time_now[1], end_hour, end_minute) % 60) + "分")
                 output_list_index += 1
                 # *********************************************************************
-                output_list[output_list_index] = ("{:*^" + str(80) + "}").format("")
+                output_list[output_list_index] = "{:*^80}".format("")
                 output_list_index += 1
 
         if start_soon:
@@ -253,13 +254,12 @@ with output(output_type="list",
                 start_hour = _.hour
                 start_minute = _.minute
                 output_list[output_list_index] = ("*{: <" + str(
-                    80 - 46 - chinese_number(i["action"])) + "}|{: >35}*").format("即将开始:" + i["action"],
+                    80 - 46 - chinese_number(i["action"])) + "}|{: >36}*").format("即将开始:" + i["action"],
                                                                                   "剩余:" + str(
-                                                                                      time_difference(
-                                                                                          user_start_time[0],
-                                                                                          user_start_time[1],
-                                                                                          time_now[0],
-                                                                                          time_now[1])) + "分")
+                                                                                      time_difference(time_now[0], time_now[1], start_hour, start_minute)) + "分")
+                output_list_index += 1
+                output_list[output_list_index] = "{:*^80}".format("")
+                output_list_index += 1
 
         time.sleep(0.2)
 
