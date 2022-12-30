@@ -3,4 +3,4 @@ venv/
 /ring.exe
 /ring.pyc
 /ring.spec
-/schedules/.
+schedules\a.schedule.json
