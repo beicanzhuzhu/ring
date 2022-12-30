@@ -236,7 +236,7 @@ with output(output_type="list",
                     .format(i["action"], i["time_start"] + "~" + i["time_end"])
                 output_list_index += 1
                 # 进度条样式
-                # *=============>               |剩余00:00:00 已过00:00:00 总共00:00:00*
+                # *=============>               |                         剩余00:00:00*
                 output_list[output_list_index] = ("*{: <" + str(80 - 42) + "}|{: >35}*") \
                     .format(
                     "=" * int(time_difference(start_hour, start_minute, time_now[0], time_now[1]) / last_minute * (
@@ -262,5 +262,3 @@ with output(output_type="list",
                 output_list_index += 1
 
         time.sleep(0.2)
-
-        #
