@@ -39,20 +39,22 @@ except FileNotFoundError:
     json.dump(settings, se, indent=0)
 
 print('自定义时间打铃器v2.1')
-try:
-    open(settings["ring_path"])
-except FileNotFoundError:
-    print("\033[0;31m", end="")
-    print("未找到音频文件\033[4m" + settings["alarm_clock_path"] + "\033[0;31m，请检查settings.json文件")
-    print("\033[0m", end="")
-    exit(1)
-try:
-    open(settings["alarm_clock_path"])
-except FileNotFoundError:
-    print("\033[0;31m", end="")
-    print("未找到音频文件\033[4;31m" + settings["alarm_clock_path"] + "\033[0;31m，请检查settings.json文件")
-    print("\033[0m", end="")
-    exit(1)
+if settings["ring_path"] != "null":
+    try:
+        open(settings["ring_path"])
+    except FileNotFoundError:
+        print("\033[0;31m", end="")
+        print("未找到音频文件\033[4m" + settings["alarm_clock_path"] + "\033[0;31m，请检查settings.json文件")
+        print("\033[0m", end="")
+        exit(1)
+if settings["alarm_clock_path"] != "null":
+    try:
+        open(settings["alarm_clock_path"])
+    except FileNotFoundError:
+        print("\033[0;31m", end="")
+        print("未找到音频文件\033[4;31m" + settings["alarm_clock_path"] + "\033[0;31m，请检查settings.json文件")
+        print("\033[0m", end="")
+        exit(1)
 
 print('现在开始设置时间表')
 print('请输入序号选择时间表或新建时间表。')
@@ -148,9 +150,11 @@ doing_things = []  # 正在进行的事
 alarm_clock = []  # 闹钟时件
 start_soon = []  # 即将开始
 
-with output(output_type="list",
-            initial_len=settings["schedule_height"],
-            interval=0) as output_list:
+output_list = []
+for i in range(0, settings["schedule_height"]):
+    output_list.append("")
+
+with output(output_type="list", initial_len=settings["schedule_height"], interval=0) as ol:
     while True:
 
         # 打印当前时间
@@ -172,7 +176,8 @@ with output(output_type="list",
                 alarm_clock.append(user_time)
 
             # 即将开始的事
-            if 0 < time_difference(time_now[0], time_now[1], user_start_time[0], user_start_time[1]) <= settings["remind_you_ahead_of_time_to_start_the_event"]:
+            if 0 < time_difference(time_now[0], time_now[1], user_start_time[0], user_start_time[1]) <= settings[
+                "remind_you_ahead_of_time_to_start_the_event"]:
                 if user_time not in start_soon:
                     start_soon.append(user_time)
 
@@ -184,11 +189,17 @@ with output(output_type="list",
                 # 添加到正在进行的事
                 if user_time not in doing_things:
                     # playsound(settings["ring_path"])
-                    print("\a\a\a", end="")
+                    if settings["ring_path"] != "null":
+                        playsound(settings["ring_path"])
+                    else:
+                        print("\a\a\a", end="")
                     doing_things.append(user_time)
             # 结束后从列表中删除
             if user_time["time_end"] != "null" and time_now > user_end_time and user_time in doing_things:
-                print("\a", end="")
+                if settings["ring_path"] != "null":
+                    playsound(settings["ring_path"])
+                else:
+                    print("\a", end="")
                 doing_things.remove(user_time)
                 for i in range(0, settings["schedule_height"]):
                     output_list[i] = ""
@@ -256,9 +267,15 @@ with output(output_type="list",
                 output_list[output_list_index] = ("*{: <" + str(
                     80 - 46 - chinese_number(i["action"])) + "}|{: >36}*").format("即将开始:" + i["action"],
                                                                                   "剩余:" + str(
-                                                                                      time_difference(time_now[0], time_now[1], start_hour, start_minute)) + "分")
+                                                                                      time_difference(time_now[0],
+                                                                                                      time_now[1],
+                                                                                                      start_hour,
+                                                                                                      start_minute)) + "分")
                 output_list_index += 1
                 output_list[output_list_index] = "{:*^80}".format("")
                 output_list_index += 1
+        for i in range(0, output_list_index + 1):
+            if ol[i] != output_list[i]:
+                ol[i] = output_list[i]
 
         time.sleep(0.2)
