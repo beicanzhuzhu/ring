@@ -1,6 +1,4 @@
 venv/
 .idea/
 /ring.exe
-/ring.pyc
-/ring.spec
 schedules/a.schedule.json
