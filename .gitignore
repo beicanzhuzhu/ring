@@ -1,2 +1,5 @@
 venv/
 .idea/
+/ring.exe
+/ring.pyc
+/ring.spec

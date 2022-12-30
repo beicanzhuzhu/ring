@@ -27,8 +27,8 @@ try:
 except FileNotFoundError:
     se = open("settings.json", "w")
     settings = {
-        "alarm_clock_path": "ring.mp3",
-        "ring_path": "ring.mp3",
+        "alarm_clock_path": "null",
+        "ring_path": "null",
         "default_schedule": "",
         "remind_you_ahead_of_time_to_start_the_event": 10,
         "remind_you_ahead_of_time_to_end_the_event": 10,
