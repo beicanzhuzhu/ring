@@ -78,24 +78,28 @@ print(str(len(schedules) + 1) + ") 新建时间表")
 while True:
     schedule_name = ""
     n = input("输入：")
-    try:
-        n = int(n)
-    except ValueError:
-        print("请输入1~" + str(len(schedules) + 1) + "的整数")
-        continue
-
-    if 0 < n <= len(schedules):
-        # 读取对应时间表
-        schedule_name = schedules[n - 1]
+    if n == "":
+        schedule_name = settings["default_schedule"] + ".schedule.json"
         break
-        # 时间表选择完成，进入运行阶段
-
-    elif n == len(schedules) + 1:
-        # 新建时间表
-        a = 1
-
     else:
-        print("请输入1~" + str(len(schedules) + 1) + "的整数")
+        try:
+            n = int(n)
+        except ValueError:
+            print("请输入1~" + str(len(schedules) + 1) + "的整数")
+            continue
+
+        if 0 < n <= len(schedules):
+            # 读取对应时间表
+            schedule_name = schedules[n - 1]
+            break
+            # 时间表选择完成，进入运行阶段
+
+        elif n == len(schedules) + 1:
+            # 新建时间表
+            a = 1
+
+        else:
+            print("请输入1~" + str(len(schedules) + 1) + "的整数")
 
 with open("schedules\\" + schedule_name) as fp:
     schedule = json.load(fp)

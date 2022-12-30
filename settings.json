@@ -1,7 +1,7 @@
 {
   "alarm_clock_path": "null",
   "ring_path": "null",
-  "default_schedule": "",
+  "default_schedule": "school",
   "remind_you_ahead_of_time_to_start_the_event": 10,
   "schedule_height": 30,
   "schedule_wide": 80
