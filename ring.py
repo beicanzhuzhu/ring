@@ -136,10 +136,11 @@ for t in range(0, len(schedule)):
 
 
 # 统计word中中文字符的数量
-def chinese_number(word) -> int:
+def chinese_number(word):
     number = 0
     for ch in word:
-        if '\u4e00' <= ch <= '\u9fff':
+        if '\u4E00' <= ch <= '\u9FFF' or ch in \
+                "。，、＇：∶；?‘’“”〝〞ˆˇ﹕︰﹔﹖﹑·¨….¸;！´？！～—ˉ｜‖＂〃｀@﹫¡¿﹏﹋﹌︴々﹟#﹩$﹠&﹪%*﹡﹢﹦﹤‐￣¯―﹨ˆ˜﹍﹎+=<­­＿_-\ˇ~﹉﹊（）〈〉‹›﹛﹜『』〖〗［］《》〔〕{}「」【】︵︷︿︹︽_﹁﹃︻︶︸﹀︺︾ˉ﹂﹄︼":
             number += 1
     return number
 
