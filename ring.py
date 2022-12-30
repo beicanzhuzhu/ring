@@ -149,7 +149,7 @@ os.system("cls")
 doing_things = []  # 正在进行的事
 alarm_clock = []  # 闹钟时件
 start_soon = []  # 即将开始
-
+last_output_list_index = settings["schedule_height"]
 output_list = []
 for i in range(0, settings["schedule_height"]):
     output_list.append("")
@@ -201,8 +201,6 @@ with output(output_type="list", initial_len=settings["schedule_height"], interva
                 else:
                     print("\a", end="")
                 doing_things.remove(user_time)
-                for i in range(0, settings["schedule_height"]):
-                    output_list[i] = ""
 
         # 输出
         output_list[output_list_index] = (datetime.strftime(_, "%Y-%m-%d %H:%M:%S"))
@@ -274,8 +272,14 @@ with output(output_type="list", initial_len=settings["schedule_height"], interva
                 output_list_index += 1
                 output_list[output_list_index] = "{:*^80}".format("")
                 output_list_index += 1
-        for i in range(0, output_list_index + 1):
+
+        for i in range(0, last_output_list_index if last_output_list_index > output_list_index else output_list_index):
             if ol[i] != output_list[i]:
                 ol[i] = output_list[i]
+
+        last_output_list_index = output_list_index
+
+        for i in range(0, output_list_index):
+            output_list[i] = ""
 
         time.sleep(0.2)
