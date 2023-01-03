@@ -101,7 +101,7 @@ while True:
         else:
             print("请输入1~" + str(len(schedules) + 1) + "的整数")
 
-with open("schedules\\" + schedule_name) as fp:
+with open("schedules\\" + schedule_name, encoding='utf-8') as fp:
     schedule = json.load(fp)
 
 # 检测时间表是否合法
@@ -139,9 +139,7 @@ for t in range(0, len(schedule)):
 def chinese_number(word):
     number = 0
     for ch in word:
-        # 我也不想这么写，没办法了
-        if '\u4E00' <= ch <= '\u9FFF' or ch in \
-                "。，、＇：∶；?‘’“”〝〞ˆˇ﹕︰﹔﹖﹑·¨….¸;！´？！～—ˉ｜‖＂〃｀@﹫¡¿﹏﹋﹌︴々﹟#﹩$﹠&﹪%*﹡﹢﹦﹤‐￣¯―﹨ˆ˜﹍﹎+=<­­＿_-\ˇ~﹉﹊（）〈〉‹›﹛﹜『』〖〗［］《》〔〕{}「」【】︵︷︿︹︽_﹁﹃︻︶︸﹀︺︾ˉ﹂﹄︼":
+        if 128 <= ord(ch):
             number += 1
     return number
 
@@ -195,19 +193,18 @@ with output(output_type="list", initial_len=settings["schedule_height"], interva
                 # 添加到正在进行的事
                 if user_time not in doing_things:
                     # playsound(settings["ring_path"])
-                    if settings["ring_path"] != "null":
-                        playsound(settings["ring_path"])
-                    else:
-                        print("\a\a\a", end="")
+                    ring = 1
                     doing_things.append(user_time)
             # 结束后从列表中删除
             if user_time["time_end"] != "null" and time_now > user_end_time and user_time in doing_things:
-                if settings["ring_path"] != "null":
-                    playsound(settings["ring_path"])
-                else:
-                    print("\a", end="")
+                ring = 1
                 doing_things.remove(user_time)
-
+        if ring == 1:
+            if settings["ring_path"] != "null":
+                playsound(settings["ring_path"])
+            else:
+                print("\a", end="")
+        ring = 0
         # 输出
         output_list[output_list_index] = (datetime.strftime(_, "%Y-%m-%d %H:%M:%S"))
         output_list_index += 1
